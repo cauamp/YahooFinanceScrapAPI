@@ -45,7 +45,7 @@ Os próximos passos incluem:
 
 
 ## Adendo
-# Cunho Educacional e Não Prejudicial 
+### Cunho Educacional e Não Prejudicial 
 
 É importante salientar que este projeto tem cunho exclusivamente educacional e não visa violar ou prejudicar a plataforma Yahoo Finance de nenhuma maneira.
 
