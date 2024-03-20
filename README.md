@@ -43,3 +43,11 @@ Os próximos passos incluem:
 - Hospedagem da API em um ambiente de produção.
 
 
+
+## Adendo
+### Cunho Educacional e Não Prejudicial 
+
+É importante salientar que este projeto tem cunho exclusivamente educacional e não visa violar ou prejudicar a plataforma Yahoo Finance de nenhuma maneira.
+
+O objetivo principal é aprender e praticar habilidades técnicas relacionadas ao web scraping, manipulação de dados, criação e gerenciamento de banco de dados, e desenvolvimento de API.
+
