@@ -1,13 +1,15 @@
 from flask import Flask, jsonify
-import sqlite3
 from datetime import datetime, timedelta
 from db_utils import *
+import psycopg2
 
 app = Flask(__name__)
 
-DATABASE=os.getenv("DATABASE_NAME")
+DATABASE=os.getenv("DATABASE_URL")
+
 def connect_db():
-	return sqlite3.connect(DATABASE)
+    conn = psycopg2.connect(DATABASE)
+    return conn
 
 def get_all_tables():
 	conn = connect_db()
@@ -35,7 +37,7 @@ def get_metrics_for_symbol(symbol):
 				metrics.extend(data)
 				break
 
-		except sqlite3.Error as e:
+		except psycopg2.Error as e:
 			print(f"Erro ao consultar tabela {table_name}: {e}")
 	conn.close()
 
