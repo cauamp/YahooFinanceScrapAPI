@@ -5,8 +5,7 @@ from db_utils import *
 
 app = Flask(__name__)
 
-DATABASE = 'finance_data.db'
-
+DATABASE=os.getenv("DATABASE_NAME")
 def connect_db():
 	return sqlite3.connect(DATABASE)
 

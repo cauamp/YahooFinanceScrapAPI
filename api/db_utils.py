@@ -1,6 +1,8 @@
 import re
 from scrap_utils  import *
-import sqlite3
+import os
+import psycopg2
+
 
 def adjust_metrics_keys (metrics):
 	if metrics is not None:
@@ -24,23 +26,23 @@ def adjust_metrics_keys (metrics):
 
 def create_table(cursor, table_name, columns):
 	
-	cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
-	existing_table = cursor.fetchone()
+	cursor.execute("SELECT EXISTS(SELECT 1 FROM information_schema.tables WHERE table_name = %s)", (table_name,))
+	table_exists = cursor.fetchone()[0]
+
+	if not table_exists:
+		cursor.execute(f"CREATE TABLE {table_name} (Symbol TEXT PRIMARY KEY, {', '.join(columns)})")
 	
-	if not existing_table:
-		cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} (Symbol TEXT PRIMARY KEY, {', '.join(columns)})")
-	
-	cursor.execute(f"PRAGMA table_info({table_name})")
-	existing_columns = [column[1] for column in cursor.fetchall()]
-	# Adicionar as colunas ausentes
+	cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = %s", (table_name,))
+	existing_columns = [column[0] for column in cursor.fetchall()]
+
 	for column in columns:
 		if column not in existing_columns:
 			cursor.execute(f"ALTER TABLE {table_name} ADD COLUMN {column} REAL")
 			
 
 def insert_data(cursor, table_name, data):
-	cursor.execute(f"PRAGMA table_info({table_name})")
-	table_columns = [column[1] for column in cursor.fetchall()]
+	cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = %s", (table_name,))
+	table_columns = [column[0] for column in cursor.fetchall()]
 
 	for key in data.keys():
 		if key not in table_columns and key != 'type' and key != 'Symbol':
@@ -50,7 +52,7 @@ def insert_data(cursor, table_name, data):
 	
 	values = tuple(data[key] for key in data.keys() if key != 'type')
 
-	placeholders = ', '.join(['?' for _ in range(len(values))])
+	placeholders = ', '.join(['%s' for _ in range(len(values))])
 
 	cursor.execute(f"DELETE FROM {table_name} WHERE Symbol = ?", (data['Symbol'],))
 
@@ -65,7 +67,8 @@ def update_symbol(symbol):
 		
 		adjust_metrics_keys(metrics)
 		
-		conn = sqlite3.connect('finance_data.db')
+		conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+
 		cursor = conn.cursor()
 		
 		table_name = metrics['type']
