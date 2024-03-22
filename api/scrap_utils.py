@@ -20,7 +20,7 @@ def check_symbol_existence(symbol):
 		
 		metrics = {}
 		metrics['Symbol'] = re.findall(r'"symbol":"(.*?)"', response.text)[0]
-		metrics['type'] = re.findall(r'"instrumentType":"(.*?)"', response.text)[0]
+		metrics['type'] = re.findall(r'"instrumentType":"(.*?)"', response.text)[0].lower()
 		return metrics
 
 	except requests.exceptions.RequestException as e:

@@ -8,30 +8,32 @@ app = Flask(__name__)
 DATABASE=os.getenv("DATABASE_URL")
 
 def connect_db():
-    conn = psycopg2.connect(DATABASE)
-    return conn
+    try:
+        conn = psycopg2.connect(DATABASE)
+        print("Conexão bem sucedida ao banco de dados PostgreSQL!")
+        return conn
+    except psycopg2.Error as e:
+        print("Erro ao conectar ao banco de dados PostgreSQL:", e)
+        return None
 
-def get_all_tables():
-	conn = connect_db()
-	cursor = conn.cursor()
-	cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+def get_all_tables(cursor):
+	cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE';")
 	tables = cursor.fetchall()
-	conn.close()
 	return [table[0] for table in tables]
 
 @app.route('/api/<symbol>/getMetrics', methods=['GET'])
 def get_metrics_for_symbol(symbol):
 	symbol = symbol.upper()
 	conn = connect_db()
+	cursor = conn.cursor()
 	metrics = []
-	for table_name in get_all_tables():
-		cursor = conn.cursor()
+	for table_name in get_all_tables(cursor):
 
 		try:
-			cursor.execute(f"PRAGMA table_info({table_name})")
-			columns = [column[1] for column in cursor.fetchall()]
+			cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table_name}';")
+			columns = [column[0] for column in cursor.fetchall()]
 
-			cursor.execute(f'SELECT * FROM {table_name} WHERE Symbol = ?', (symbol,))
+			cursor.execute(f'SELECT * FROM {table_name} WHERE Symbol = %s', (symbol,))
 			data = cursor.fetchall()
 			if data:
 				metrics.extend(data)
@@ -39,7 +41,6 @@ def get_metrics_for_symbol(symbol):
 
 		except psycopg2.Error as e:
 			print(f"Erro ao consultar tabela {table_name}: {e}")
-	conn.close()
 
 	if metrics != [] and metrics is not None and 'timestamp' in metrics:
 		current_date = datetime.datetime.now()
@@ -47,7 +48,7 @@ def get_metrics_for_symbol(symbol):
 		time_difference = current_date - data_timestamp
 		if time_difference > datetime.timedelta(hours=24):
 			print("Informações disponiveis são antigas, atualizando... \n")
-			metrics = update_symbol(symbol)
+			metrics = update_symbol(symbol, cursor)
 			if metrics is None:
 				return jsonify({"message": "Failed to update metrics."}), 500
 
@@ -55,10 +56,13 @@ def get_metrics_for_symbol(symbol):
 
 	if metrics == []:
 		print("Informações não encontradas para o símbolo especificado. Realizando pesquisa... \n")
-		result_dict = update_symbol(symbol)
+		result_dict = update_symbol(symbol, cursor)
 	else:
 		for i, column  in enumerate(columns):
 			result_dict[column] = metrics[0][i]
+
+	conn.commit()
+	conn.close()
 
 	return jsonify(result_dict)
 
