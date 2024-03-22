@@ -1,9 +1,9 @@
 {
-
-    "rewrites": [
-
-        { "source": "/(.*)", "destination": "/api/API" }
-
-    ]
-
-}
+	"rewrites": [
+	  {
+		"source": "/api/(.*)",
+		"destination": "/api/API.py"
+	  }
+	]
+  }
+  
