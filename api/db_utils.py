@@ -1,5 +1,5 @@
 import re
-from scrap_utils import *
+from .scrap_utils import *
 import os
 import psycopg2
 

@@ -1,9 +1,25 @@
 {
-	"rewrites": [
-	  {
-		"source": "/api/(.*)",
-		"destination": "/api/API.py"
-	  }
+	"routes": [
+		{
+			"src": "/api/(.*)/getAssetsMetrics",
+			"methods": [
+				"GET"
+			],
+			"dest": "/api/API.py"
+		},
+		{
+			"src": "/api/(.*)/getAssetsList",
+			"methods": [
+				"GET"
+			],
+			"dest": "/api/API.py"
+		},
+		{
+			"src": "/api/(.*)/getMetrics",
+			"methods": [
+				"GET"
+			],
+			"dest": "/api/API.py"
+		}
 	]
-  }
-  
+}

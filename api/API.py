@@ -1,6 +1,10 @@
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from flask import Flask, jsonify
 from datetime import datetime, timedelta
-from db_utils import *
+from .db_utils import *
 import psycopg2
 
 app = Flask(__name__)
