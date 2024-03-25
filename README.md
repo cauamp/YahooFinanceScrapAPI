@@ -33,15 +33,13 @@ As principais tecnologias e ferramentas a serem utilizadas no projeto são:
 - Beautiful Soup
 - SQLite
 - Flask
+- PostgreSQL
 
 ## Próximos Passos
 Os próximos passos incluem:
 
-- Conclusão da implementação da base de dados.
-- Desenvolvimento e implementação da API.
+- Implementação de autenticação na API.
 - Testes e validação do sistema.
-- Hospedagem da API em um ambiente de produção.
-
 
 
 ## Adendo
