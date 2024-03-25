@@ -34,13 +34,11 @@ def get_metrics_for_symbol(symbol):
 	for table_name in get_all_tables(cursor):
 
 		try:
-			cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table_name}';")
-			columns = [column[0] for column in cursor.fetchall()]
-
 			cursor.execute(f'SELECT * FROM {table_name} WHERE Symbol = %s', (symbol,))
 			data = cursor.fetchall()
 			if data:
 				metrics.extend(data)
+				columns = [column[0] for column in cursor.description]
 				break
 
 		except psycopg2.Error as e:
