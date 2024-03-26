@@ -84,7 +84,7 @@ response = requests.put('https://yahoo-finance-scrap-api.vercel.app/api/AAPL/upd
 print(response.json())
 
 # Recuperar métricas específicas para um símbolo
-response = requests.get('https://yahoo-finance-scrap-api.vercel.app/api/AAPL/filteredMetrics?metrics=Price,Volume')
+response = requests.get('https://yahoo-finance-scrap-api.vercel.app/api/AAPL/filteredMetrics?metrics=symbol&metrics=qsp_price')
 print(response.json())
 
 # Recuperar métricas de ativos de uma tabela específica
