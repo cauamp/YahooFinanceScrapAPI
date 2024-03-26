@@ -1,7 +1,5 @@
 import re
 from .scrap_utils import *
-import os
-import psycopg2
 
 column_data_types = {
     "date": "DATE",

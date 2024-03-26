@@ -1,21 +1,35 @@
 {
 	"routes": [
 		{
-			"src": "/api/(.*)/getAssetsMetrics",
+			"src": "/api/(.*)/allSymbols",
 			"methods": [
 				"GET"
 			],
 			"dest": "/api/API.py"
 		},
 		{
-			"src": "/api/(.*)/getAssetsList",
+			"src": "/api/(.*)/list",
 			"methods": [
 				"GET"
 			],
 			"dest": "/api/API.py"
 		},
 		{
-			"src": "/api/(.*)/getMetrics",
+			"src": "/api/(.*)/metrics",
+			"methods": [
+				"GET"
+			],
+			"dest": "/api/API.py"
+		},
+		{
+			"src": "/api/(.*)/update",
+			"methods": [
+				"PUT"
+			],
+			"dest": "/api/API.py"
+		},
+		{
+			"src": "/api/(.*)/filteredMetrics",
 			"methods": [
 				"GET"
 			],
