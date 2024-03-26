@@ -38,8 +38,10 @@ As principais tecnologias e ferramentas utilizadas no projeto incluem:
 - **Regex:** Expressões regulares são utilizadas para manipular e extrair informações específicas dos dados coletados.
 - **SQLite:** Banco de dados embutido utilizado para armazenar as informações coletadas durante o processo de web scraping.
 - **Flask:** Framework web em Python utilizado para criar a API que disponibiliza os dados coletados.
+- **Psycopg:** Biblioteca em Python utilizada para conectar e interagir com bancos de dados PostgreSQL.
 - **PostgreSQL:** Sistema de gerenciamento de banco de dados relacional utilizado para armazenar e gerenciar os dados de forma mais robusta em ambientes de produção.
-
+- **Neon Console:** Ferramenta utilizada para visualizar, configurar e controlar bancos de dados PostgreSQL.
+- **Vercel:** Plataforma utilizada para hospedar a aplicação e disponibilizá-la publicamente na web.
 
 ## Adendo
 ### Cunho Educacional
